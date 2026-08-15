@@ -1,15 +1,18 @@
 # MSResponse_Q1andQ3
 ## Question 1
-### Choice of Microcontroller
+### Choice of Microcontroller [1]
 * MCU: STM32L476
 * Clock speed: 80 MHz
 * Flash memory: 1MB
-* SRAM memory: 128kB
+* SRAM memory: 128kB 
 
 The STM32L4 family is a Cortex M4 ulta-low power class of microcontrollers, with applications in wearable devices. The required sustained rate of data writing is 10 Mb/min, or about 20.8 kB/s. This is a low data rate compared to the 80 MHz clock speed of the STM32L476. Writing continuously at such a rate for an extended period of time, such as a day, would use 1.8 GB. The internal 1MB flash memory is not sufficient for this purpose; therefore, an SD-card interface would be required. 
 
 ### Buffer Sizing and Strategy
 The size of the double buffer would have to take the 128kB SRAM into consideration. An interrupt Service routing can be used instead of polling.
+
+### References
+[1]“STM32L476RG - Ultra-low-power with FPU Arm Cortex-M4 MCU 80 MHz with 1 Mbyte of Flash memory, LCD, USB OTG, DFSDM - STMicroelectronics.” Accessed: Aug. 15, 2026. [Online]. Available: https://www.st.com/en/microcontrollers-microprocessors/stm32l476rg.html
 
 ___
 
