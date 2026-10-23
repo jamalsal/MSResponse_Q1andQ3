@@ -12,18 +12,41 @@ def main():
     
     data = list(map(float, data.split("\n")))
     fs = 100 #sampling frequency
-    sp_index = detectPeak(data) #Systolic peak detection
     plt.plot(data)
-    plt.plot(sp_index, [data[i] for i in sp_index],"rx")
-    plt.title("Raw signal with detected peaks")
     plt.show()
-    segmented_signal = segmentBeat(data, sp_index)
-    beat_length = calcBeatDuration(sp_index,fs)
+    data_noise = white_noise(data)
+    filtered = bandpass(data_noise, 8, 0.5, fs, 5)
+    data_peaks = detectPeak(filtered) #Systolic peak detection
+    segmented_signal = segmentBeat(filtered, data_peaks)
+    beat_length = calcBeatDuration(data_peaks,fs)
     max_period = max(beat_length)*fs
-    R = autoCorrelate(data, 10*math.ceil(max_period)) #Autocorrelation over one cycle
+    normalised_signal = normalise(segmented_signal)
+    R = autoCorrelate(normalised_signal, 10*math.ceil(max_period)) #Autocorrelation over one cycle
     plt.plot(R)
     plt.title("Autocorrelation")
     plt.show()
+
+def white_noise(signal):
+    noise = np.random.normal(0, 0.1, len(signal))
+    noisy_signal = signal + noise
+    return noisy_signal
+
+def bandpass(data,ub,lb,fs,order):
+    sos = signal.butter(order, [lb, ub], fs=fs, btype='bandpass', output='sos') #second order section
+    filtered_signal = signal.sosfiltfilt(sos, data)
+    return filtered_signal
+def normalise(signal):
+    signal_n = []
+    for i in range(len(signal)):
+        if len(signal[i]) > 1:
+            mx = statistics.mean(signal[i])
+            std = statistics.stdev(signal[i])
+            for j in range(len(signal[i])):
+                    signal_n.append((signal[i][j] - mx) / std)
+        else:
+            signal_n.append(None)
+
+    return np.array(signal_n)
 
 def detectPeak(signal):
     threshold = 0.70*max(signal) #minimum threshold for systolic peak detection
