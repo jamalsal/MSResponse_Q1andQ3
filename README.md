@@ -26,7 +26,7 @@ The dataset used is from the work of Goda et al., and contains 3 minutes of PPG 
 The dataset can be found here:
 [PhysioZoo PPG](https://pyppg.readthedocs.io/en/latest/tutorials/PZ_PPG.html) [1]
 
-### Methodology and 
+### Methodology and Results
 Gaussian noise is introduced to the raw data, which is then filtered and normalised around the mean.
 For systolic peak detection, a threshold of 0.75 of the maximum intensity of the PPG signal is used. In a loop, each element of the signal is tested if it is larger than both elements preceding and succeeding it, and if it crosses the threshold. The index of the element is added to an array. Figure 1 shows the peaks overlaid on the raw signal:
 
